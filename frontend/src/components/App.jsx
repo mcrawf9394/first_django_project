@@ -1,5 +1,6 @@
 import {Link, Route, Routes} from 'react-router-dom'
 import './stylesheets/App.css'
+import Login from './Login'
 function App() {
   return (
     <>
@@ -10,7 +11,7 @@ function App() {
         <Link></Link>
       </nav>
       <Routes>
-
+          <Route Component={Login} path='/login'/>
       </Routes>
     </>
   )
