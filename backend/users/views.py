@@ -25,7 +25,7 @@ def interact_with_single_user(request, uid):
             user = User.objects.get(id=uid)
         except User.DoesNotExist:
             return JsonResponse({"msg": "This user does not exist"})
-        return JsonResponse(user)
+        return JsonResponse({"username": user.get_username()})
     elif request.method == 'POST':
         if userId != uid:
             return JsonResponse({"msg": "You can not change another user"})
@@ -59,7 +59,10 @@ def interact_with_single_user(request, uid):
             user.delete()
             return JsonResponse({"msg": "User Deleted"})
 def isAuth(request):
-    userId = jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"])
+    try:
+        userId = jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        return JsonResponse({"msg": "This token is expired"})
     return JsonResponse({"id": userId.get("id")})
 def login(request):
     user = authenticate(request, username=request.POST["username"], password=request.POST["password"])
