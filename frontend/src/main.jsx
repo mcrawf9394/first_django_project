@@ -4,13 +4,15 @@ import App from './components/App.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './stylesheets/index.css'
 import Login from './components/Login.jsx'
+import EditProfile from './components/Profiles/EditProfile.jsx'
 
 const Router = createBrowserRouter([
   {
     path: '*',
     element:<App/>,
     children: [
-      {path: 'login', element: <Login/>}
+      {path: 'login', element: <Login/>},
+      {path: 'profile/edit/:userId', element: <EditProfile/>}
     ]
   }
 ])
