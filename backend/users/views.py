@@ -34,19 +34,18 @@ def interact_with_single_user(request, uid):
                 user = User.objects.get(id=uid)
             except User.DoesNotExist:
                 return JsonResponse({"msg": "This user does not exist"})
-            def update(username, password):
+            def update(username):
                 user.username = username
-                user.set_password(password)
                 user.save()
             try:
                 CheckUser = User.objects.get(username=request.POST["username"])
             except User.DoesNotExist:
-                update(request.POST["username"], request.POST["password"])
+                update(request.POST["username"])
                 return JsonResponse({"msg": "User updated"})
             if CheckUser.id != uid:
                 return JsonResponse({"msg":"Please use another username"})
             else:
-                update(request.POST["username"], request.POST["password"])
+                update(request.POST["username"])
                 return JsonResponse({"msg":"User updated"})
     elif request.method == 'DELETE':
         if userId != uid:
@@ -58,6 +57,16 @@ def interact_with_single_user(request, uid):
                 return JsonResponse({"msg": "This user does not exist"})
             user.delete()
             return JsonResponse({"msg": "User Deleted"})
+def updatePassword(request):
+    if request.method == 'POST':
+        try:
+            userId = jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"])
+        except:
+            return JsonResponse({"error": "This token is expired"})
+        user = User.objects.get(id=userId.get("id"))
+        user.set_password(request.POST["password"])
+        user.save()
+        return JsonResponse({"msg": "User's password has been updated"})
 def isAuth(request):
     try:
         userId = jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"])

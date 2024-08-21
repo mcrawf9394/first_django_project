@@ -2,13 +2,16 @@ import {Form, useNavigate} from 'react-router-dom'
 import {useState} from 'react'
 import serverUrl from './serverUrl'
 import {v4} from 'uuid'
+import '../stylesheets/Login.css'
 function Login () {
     const navigate = useNavigate()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [errors, setErrors] = useState([])
     return <>
-        <Form action={serverUrl + 'users/login/'} method='POST' className='loginForm'>
+        <h2>Welcome to Placeholder</h2>
+        <p>Use the form below to login, click the sign in as guest button, or signup to create an account</p>
+        <Form className='userLoginForm' action={serverUrl + 'users/login/'} method='POST'>
             <label htmlFor="username">Username</label>
             <input id='username' value={username} onChange={e => setUsername(e.target.value)} type="text" />
             <label htmlFor="password">Password</label>
@@ -33,7 +36,19 @@ function Login () {
                 }
             }} type="submit">Submit</button>
         </Form>
-        <ul>
+        <button onClick={async click => {
+            click.preventDefault()
+            try {
+
+            } catch {
+
+            }
+        }}>Sign in as Guest</button>
+        <button onClick={click => {
+            click.preventDefault()
+
+        }}>Sign-Up</button>
+        <ul className='loginErrorList'>
             {errors.map(error => {
                 return <li key={v4()}>
                     {error}
