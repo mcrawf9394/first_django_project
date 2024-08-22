@@ -39,14 +39,37 @@ function Login () {
         <button onClick={async click => {
             click.preventDefault()
             try {
-
+                const request = await fetch(serverUrl + 'users/login/', {
+                    mode: 'cors',
+                    method: 'POST',
+                    body: new URLSearchParams(`username=Guest&password=SimplePassword`)
+                })
+                const response = await request.json()
+                if (response.msg) {
+                    const request2 = await fetch(serverUrl + 'users/', {
+                        mode: 'cors',
+                        method: 'POST',
+                        body: new URLSearchParams(`username=Guest&password=SimplePassword`)
+                    })
+                    const request3 = await fetch(serverUrl + 'users/login/', {
+                        mode: 'cors',
+                        method: 'POST',
+                        body: new URLSearchParams(`username=Guest&password=SimplePassword`)
+                    })
+                    const response = await request3.json()
+                    localStorage.setItem('token', response.token)
+                    navigate('/')
+                } else {
+                    localStorage.setItem('token', response.token)
+                    navigate('/')
+                }
             } catch {
-
+                setErrors(["There was an error reaching the server"])
             }
         }}>Sign in as Guest</button>
         <button onClick={click => {
             click.preventDefault()
-
+            navigate('/signup')
         }}>Sign-Up</button>
         <ul className='loginErrorList'>
             {errors.map(error => {

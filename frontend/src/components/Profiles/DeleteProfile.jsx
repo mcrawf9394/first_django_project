@@ -13,14 +13,14 @@ function DeleteProfile ({onClose}) {
             <button className="" onClick={async click => {
                 click.preventDefault()
                 try {
-                    const request = await fetch(serverUrl + `users/${params.userId}`,{
+                    const request = await fetch(serverUrl + `users/${params.userId}/`,{
                         mode: 'cors',
                         method: 'DELETE',
                         headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
                     })
                     if (request.status === 200) {
                         localStorage.clear()
-                        navigate('/')
+                        navigate('/login')
                     } else {
                         setErrors([{msg: 'Could not reach the server'}])
                     }

@@ -7,4 +7,6 @@ urlpatterns = [
     path('updatePassword/', views.updatePassword, name='passwordUpdate'),
     path('isAuth/', views.isAuth, name="checkAuth"),
     path("login/", views.login, name='loginUser'),
+    path("following/", views.getCurrentUserFollowing, name='following'),
+    path("addfollowing/", views.addUserToFollowing, name='addfollowing'),
 ]
