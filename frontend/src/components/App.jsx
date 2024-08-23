@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import Login from './Login'
 import EditProfile from './Profiles/EditProfile'
 import serverUrl from './serverUrl'
+import ViewAllUsers from './Profiles/ViewAllUsers'
+import ShowFollowing from './Profiles/ShowFollowing'
+import ViewProfile from './Profiles/ViewProfile'
 function App() {
     const navigate = useNavigate()
     const [userID, setUserID] = useState(null)
@@ -40,13 +43,17 @@ function App() {
             <nav className='navBar'>
                 <h1>Placeholder</h1>
                 <Link to='/' className='links'>Home</Link>
-                <Link  className='links'>Communities</Link>
+                <Link to='/users/' className='links'>All Users</Link>
+                <Link  className='links'>Groups</Link>
                 <Link className='links'>Messages</Link>
-                <Link className='links'>Following</Link>
-                <Link to={`/profile/edit/${userID}`} className='links'>Profile</Link>
+                <Link to='/following/' className='links'>Following</Link>
+                <Link to={`/profile/edit/${userID}/`} className='links'>Profile</Link>
             </nav>
             <Routes>
                 <Route Component={EditProfile} path={`/profile/edit/:userId`}/>
+                <Route Component={ViewAllUsers} path='/users/'/>
+                <Route Component={ShowFollowing} path='/following/'/>
+                <Route Component={ViewProfile} path='/users/:userId'/>
             </Routes>
         </>
     )

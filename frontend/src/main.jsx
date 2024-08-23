@@ -6,13 +6,17 @@ import './stylesheets/index.css'
 import Login from './components/Login.jsx'
 import EditProfile from './components/Profiles/EditProfile.jsx'
 import SignUp from './components/SignUp.jsx'
+import ViewAllUsers from './components/Profiles/ViewAllUsers.jsx'
+import ShowFollowing from './components/Profiles/ShowFollowing.jsx'
 
 const Router = createBrowserRouter([
   {
     path: '*',
     element:<App/>,
     children: [
-      {path: 'profile/edit/:userId', element: <EditProfile/>}
+      {path: 'profile/edit/:userId', element: <EditProfile/>},
+      {path: 'users/', element: <ViewAllUsers/>},
+      {path: 'following/', element: <ShowFollowing/>},
     ]
   }, 
   {

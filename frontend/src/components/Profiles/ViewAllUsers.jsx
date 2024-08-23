@@ -1,29 +1,34 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom'
 import serverUrl from '../serverUrl'
-import {v4} from 'uuid'
-function ShowFollowing () {
+import { v4 } from 'uuid'
+function ViewAllUsers () {
     const navigate = useNavigate()
-    const [users, setUsers] = useState([])
+    const [userList, setUserList] = useState([])
     const [errors, setErrors] = useState([])
     useEffect(() => {
-        const getInfo = async () =>{
+        const getInfo = async () => {
             try {
-                const request = await fetch(serverUrl + 'users/following/', {
+                const request = await fetch(serverUrl + 'users/', {
                     mode: 'cors',
                     method: 'GET',
-                    headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
                 })
                 const response = await request.json()
-                setUsers(response.users)
+                setUserList(response.users)
             } catch {
-                setErrors(["There was an issue reaching the server"])   
+                setErrors(["There was an error reaching the server"])
             }
         }
         getInfo()
     }, [])
-    return <>
-            {users.map(user => {
+    if (userList.length == 0) {
+        return <>
+
+        </>
+    } else {
+        return <>
+            {userList.map(user => {
                 return <button className="userButton" onClick={click => {
                     click.preventDefault()
                     navigate(`/users/${user.id}/`)
@@ -36,6 +41,7 @@ function ShowFollowing () {
                     return <li key={v4()}>{error}</li>
                 })}
             </ul>
-    </>
+        </>
+    }
 }
-export default ShowFollowing
+export default ViewAllUsers

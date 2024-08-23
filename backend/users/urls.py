@@ -8,5 +8,5 @@ urlpatterns = [
     path('isAuth/', views.isAuth, name="checkAuth"),
     path("login/", views.login, name='loginUser'),
     path("following/", views.getCurrentUserFollowing, name='following'),
-    path("addfollowing/", views.addUserToFollowing, name='addfollowing'),
+    path("addfollowing/<str:username>/", views.addUserToFollowing, name='addfollowing'),
 ]
