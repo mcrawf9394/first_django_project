@@ -8,6 +8,7 @@ import EditProfile from './components/Profiles/EditProfile.jsx'
 import SignUp from './components/SignUp.jsx'
 import ViewAllUsers from './components/Profiles/ViewAllUsers.jsx'
 import ShowFollowing from './components/Profiles/ShowFollowing.jsx'
+import FollowersPosts from './components/Posts/FollowersPosts.jsx'
 
 const Router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const Router = createBrowserRouter([
       {path: 'profile/edit/:userId', element: <EditProfile/>},
       {path: 'users/', element: <ViewAllUsers/>},
       {path: 'following/', element: <ShowFollowing/>},
+      {path: '', element: <FollowersPosts/ >}
     ]
   }, 
   {

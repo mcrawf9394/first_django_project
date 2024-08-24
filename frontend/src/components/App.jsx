@@ -7,6 +7,7 @@ import serverUrl from './serverUrl'
 import ViewAllUsers from './Profiles/ViewAllUsers'
 import ShowFollowing from './Profiles/ShowFollowing'
 import ViewProfile from './Profiles/ViewProfile'
+import FollowersPosts from './Posts/FollowersPosts'
 function App() {
     const navigate = useNavigate()
     const [userID, setUserID] = useState(null)
@@ -54,6 +55,7 @@ function App() {
                 <Route Component={ViewAllUsers} path='/users/'/>
                 <Route Component={ShowFollowing} path='/following/'/>
                 <Route Component={ViewProfile} path='/users/:userId'/>
+                <Route Component={FollowersPosts} path='/'/>
             </Routes>
         </>
     )
