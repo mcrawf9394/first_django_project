@@ -8,6 +8,7 @@ import ViewAllUsers from './Profiles/ViewAllUsers'
 import ShowFollowing from './Profiles/ShowFollowing'
 import ViewProfile from './Profiles/ViewProfile'
 import FollowersPosts from './Posts/FollowersPosts'
+import IndividualPost from './Posts/IndividualPost'
 function App() {
     const navigate = useNavigate()
     const [userID, setUserID] = useState(null)
@@ -56,6 +57,7 @@ function App() {
                 <Route Component={ShowFollowing} path='/following/'/>
                 <Route Component={ViewProfile} path='/users/:userId'/>
                 <Route Component={FollowersPosts} path='/'/>
+                <Route Component={IndividualPost} path='/posts/:postId'/>
             </Routes>
         </>
     )
