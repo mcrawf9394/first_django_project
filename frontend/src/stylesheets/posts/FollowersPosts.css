@@ -1,0 +1,22 @@
+.followersPosts {
+    width: 80%;
+    height: 20rem;
+    margin-left: 10%;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.addNewPostForm {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 1rem;
+    display: inline-flex;
+}
+
+.addNewPostInput {
+    width: 80%;
+}
+
+.addNewPostButton {
+
+}

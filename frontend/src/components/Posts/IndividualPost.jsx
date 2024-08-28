@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import {useParams, useNavigate} from 'react-router-dom'
 import serverUrl from '../serverUrl'
+import {v4} from 'uuid'
+import '../../stylesheets/posts/IndividualPost.css'
 function IndividualPost () {
     const navigate = useNavigate()
     const params = useParams()
@@ -9,6 +11,7 @@ function IndividualPost () {
     const [likes, setLikes] = useState(0)
     const [comments, setComments] = useState([])
     const [errors, setErrors] = useState([])
+    const [liked, setLiked] = useState("isNotLiked")
     useEffect(() => {
         const getInfo = async () => {
             try {
@@ -25,6 +28,9 @@ function IndividualPost () {
                     setPost(response.postContent)
                     setLikes(response.likes)
                     setComments(response.comments)
+                    if (response.isLikedByUser == true) {
+                        setLiked("isLiked")
+                    }
                 }
             } catch {
                 setErrors(["There was an error reaching the server"])
@@ -38,18 +44,40 @@ function IndividualPost () {
         </>
     } else {
         return <>
-            <div>
-                <h2>{username} - {post}</h2>
-                <button>{likes}</button>
+            <div className="singlePostDisplay">
+                <button className='goBackButton' onClick={click => {
+                    click.preventDefault()
+                    navigate('/')
+                }}>Go Back</button>
+                <h2 className="basicInfoFromPost">{username} - {post}</h2>
+                <button className={`${liked}`} onClick={async click => {
+                    click.preventDefault()
+                    try {
+                        const request = await fetch(serverUrl + `posts/${params.postId}/handleLikes/`, {
+                            mode: 'cors',
+                            method: 'POST',
+                            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+                        })
+                        const response = await request.json()
+                        if (response.isLiked == true) {    
+                            setLiked("isLiked")
+                        } else {
+                            setLiked("isNotLiked")
+                        }
+                        setLikes(response.likes)
+                    } catch {
+                        setErrors(["Unable to reach the server"])
+                    }
+                }}>{likes}</button>
             </div>
-            <ul>
+            <ul className="commentList">
                 {comments.map(comment => {
-                    return <li>{comment.commentContent}</li>
+                    return <li className="singleComment" key={v4()}>{comment.commentContent}</li>
                 })}
             </ul>
             <ul>
                 {errors.map(error => {
-                    return <li>{error}</li>
+                    return <li key={v4()}>{error}</li>
                 })}
             </ul>
         </>

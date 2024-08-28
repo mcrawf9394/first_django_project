@@ -68,7 +68,9 @@ def interactWithSpecificPost(request, postId):
             for comment in comments:
                 tempList.append({"commentContent": comment.commentContent, "username": comment.userId.username, "likes": len(json.loads(comment.listOfLikes))})
             comments = tempList
-        responseObj = {"username": post.userId.username,"postContent": post.postContent, "likes": len(json.loads(post.listOfLikes)), "comments": comments}
+        postLikes = json.loads(post.listOfLikes)
+        isLikedByUser = postLikes.count(User.objects.get(id=userId).username) > 0
+        responseObj = {"username": post.userId.username,"postContent": post.postContent, "likes": len(json.loads(post.listOfLikes)), "comments": comments, "isLikedByUser": isLikedByUser}
         return JsonResponse(responseObj)
     elif request.method == 'DELETE':
         if post.userId != User.objects.get(id=userId):
@@ -76,3 +78,22 @@ def interactWithSpecificPost(request, postId):
         else:
             post.delete()
             return JsonResponse({"msg": "This post has been deleted"})
+def handleLikes(request, postId):
+    if request.method == 'POST':
+        post = Post.objects.get(id=postId)
+        likes = json.loads(post.listOfLikes)
+        user = User.objects.get(id=jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"]).get("id"))
+        if likes.count(user.username) == 0:
+            likes.append(user.username)
+        else:
+            likes.remove(user.username)
+        post.listOfLikes = json.dumps(likes)
+        post.save()
+        return JsonResponse({"isLiked": likes.count(user.username) == 0, "likes": len(likes)})
+
+#Views that handle the interaction with comments
+def baseCommentsRoutes(request, postId):
+    if request.method == 'POST':
+        newComment = Comment(postId=Post.objects.get(id=postId), userId=User.objects.get(id=jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"]).get("id")), commentContent=request.POST["commentContent"], listOfLikes=json.dumps([]), created=timezone.now())
+        newComment.save()
+        return JsonResponse({"comment": {"commentContent": newComment.commentContent, "username": newComment.userId.username, "likes": len(json.loads(newComment.listOfLikes))}})

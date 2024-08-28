@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import serverUrl from '../serverUrl'
 import {v4} from 'uuid'
+import '../../stylesheets/profile/ShowFollowing.css'
 function ShowFollowing () {
     const navigate = useNavigate()
     const [users, setUsers] = useState([])

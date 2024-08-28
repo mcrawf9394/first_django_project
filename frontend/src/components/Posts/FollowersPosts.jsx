@@ -2,15 +2,16 @@ import {useState, useEffect} from 'react'
 import {useNavigate, Form} from 'react-router-dom'
 import serverUrl from '../serverUrl'
 import {v4} from 'uuid'
+import '../../stylesheets/posts/FollowersPosts.css'
 function FollowersPosts () {
     const navigate = useNavigate()
     const [posts, setPosts] = useState([])
     const [errors, setErrors] = useState([])
     function AddPosts () {
         const [content, setContent] = useState('')
-        return <Form>
-            <input id='postContent' type="text" value={content} onChange={e => {setContent(e.target.value)}} />
-            <button onClick={async click => {
+        return <Form className='addNewPostForm'>
+            <input className='addNewPostInput' id='postContent' type="text" value={content} onChange={e => {setContent(e.target.value)}} />
+            <button className='addNewPostButton' onClick={async click => {
                 click.preventDefault()
                 try {
                     const request = await fetch(serverUrl + 'posts/', {
@@ -58,7 +59,7 @@ function FollowersPosts () {
         return <>
             <AddPosts />
             {posts.map(post => {
-                return <button onClick={click => {
+                return <button className='followersPosts' onClick={click => {
                     click.preventDefault()
                     navigate(`/posts/${post.id}`)
                 }} key={v4()}>{post.username} - {post.postContent}</button>
