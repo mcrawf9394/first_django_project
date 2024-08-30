@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import {useParams, useNavigate} from 'react-router-dom'
+import {useParams, useNavigate, Form} from 'react-router-dom'
 import serverUrl from '../serverUrl'
 import {v4} from 'uuid'
 import '../../stylesheets/posts/IndividualPost.css'
@@ -70,6 +70,13 @@ function IndividualPost () {
                     }
                 }}>{likes}</button>
             </div>
+            <Form>
+                <input id="addComment" type="text" />
+                <button onClick={async click => {
+                    click.preventDefault()
+                    
+                }}>Add Comment</button>
+            </Form>
             <ul className="commentList">
                 {comments.map(comment => {
                     return <li className="singleComment" key={v4()}>{comment.commentContent}</li>

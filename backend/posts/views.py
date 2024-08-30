@@ -97,3 +97,29 @@ def baseCommentsRoutes(request, postId):
         newComment = Comment(postId=Post.objects.get(id=postId), userId=User.objects.get(id=jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"]).get("id")), commentContent=request.POST["commentContent"], listOfLikes=json.dumps([]), created=timezone.now())
         newComment.save()
         return JsonResponse({"comment": {"commentContent": newComment.commentContent, "username": newComment.userId.username, "likes": len(json.loads(newComment.listOfLikes))}})
+def accessOneComment(request, postId, commentId):
+    if request.method == 'DELETE' or request.method == 'POST':
+        requestedComment = Comment.objects.get(id=commentId)
+        currentUser = User.objects.get(id=jwt.decode(request.headers["Authorization"].split(' ')[1], env("JWTSECRET"), algorithms=["HS256"]).get("id"))
+        if requestedComment.userId != currentUser or requestedComment.postId.userId != currentUser:
+            return JsonResponse({'msg': "You cannot delete or edit a comment that you did not create"})
+        else:
+            if request.method =='DELETE':
+                requestedComment.delete()
+                return JsonResponse({"success": "This comment was successfully deleted"})
+            else:
+                requestedComment.commentContent = request.POST["commentContent"]
+                requestedComment.save()
+                return JsonResponse({"success": "This comment was successfully updated"})
+def handleCommentLikes(request, postId, commentId):
+    if request.method == 'POST':
+        requestedComment = Comment.objects.get(id=commentId)
+        likes = json.loads(requestedComment.listOfLikes)
+        user = User.objects.get(id=jwt.decode(request.headers["Authorization"].split(' ')[1], env('JWTSECRET'), algorithms=["HS256"]).get("ID"))
+        if likes.count(user.username) == 0:
+            likes.append(user.username)
+        else:
+            likes.remove(user.username)
+        requestedComment.listOfLikes = json.dumps(likes)
+        requestedComment.save()
+        return JsonResponse({"likes": len(likes), "isLiked": likes.count(user.username) > 0})
